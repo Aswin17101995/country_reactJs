@@ -22,18 +22,17 @@ const Card: React.FC<types.CardProps> = ({ itm }) => {
               {itm.name.common}
             </h1>
             <div className="flex mt-2 justify-between pb-2 border-b-1 border-slate-400">
-              {itm.capital && (
-                <>
-                  <div>
-                    <div className="text-sm font-light text-slate-400">
-                      Capital
-                    </div>
-                    <div className="pt-1 text-md text-slate-400 font-bold">
-                      {itm.capital[0]}
-                    </div>
+              <>
+                <div>
+                  <div className="text-sm font-light text-slate-400">
+                    Capital
                   </div>
-                </>
-              )}
+                  <div className="pt-1 text-md text-slate-400 font-bold">
+                    {itm.capital ? itm.capital[0] : "NA"}
+                  </div>
+                </div>
+              </>
+
               <div className="text-right">
                 <div className="text-sm font-light text-slate-400">
                   Continent
@@ -61,18 +60,17 @@ const Card: React.FC<types.CardProps> = ({ itm }) => {
               <div className="text-md text-slate-400">Population</div>
               <div>{formatPopulation(Number(itm.population))}</div>
             </div>
-            {itm.timezones && (
-              <>
-                <div
-                  className="flex justify-between mt-2 pb-4 
+
+            <>
+              <div
+                className="flex justify-between mt-2 pb-4 
                 text-md text-slate-400
                 "
-                >
-                  <div className="text-md text-slate-400">TimeZone</div>
-                  <div>{itm.timezones[0]}</div>
-                </div>
-              </>
-            )}
+              >
+                <div className="text-md text-slate-400">TimeZone</div>
+                <div>{itm.timezones ? itm.timezones[0] : "NA"}</div>
+              </div>
+            </>
           </div>
         </div>
       </div>

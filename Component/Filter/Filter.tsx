@@ -1,6 +1,14 @@
 import * as data from "../../lib/jsonData";
 import AreaSlider from "./AreaSlider";
-const Filter = () => {
+import * as types from "./types";
+const Filter: React.FC<types.FilterProps> = ({
+  handleSearch,
+  handleChangeContinent,
+  handleChangeArea,
+  handleChangePopulation,
+  search,
+  continents,
+}) => {
   return (
     <>
       <div className="md:w-1/6 p-2 text-slate-400 -translate-x-300 w-0 md:translate-x-0 bg-slate-800 shadow-md duration-100 md: h-screen">
@@ -17,6 +25,8 @@ const Filter = () => {
             type="text"
             name="searchCountry"
             id="searchCountry"
+            value={search}
+            onChange={handleSearch}
             placeholder="Search Country"
             className="p-2 focus:outline-none text-center w-full text-slate-400 placeholder:text-slate-600 rounded-md border-1 border-slate-600"
           ></input>
@@ -29,9 +39,14 @@ const Filter = () => {
                 <div className="flex items-center">
                   <input
                     type="checkbox"
+                    readOnly
                     name={itm.id.toString()}
                     id={itm.id.toString()}
                     className="hidden peer"
+                    checked={continents.includes(itm.id) ? true : false}
+                    onClick={() => {
+                      handleChangeContinent(itm.id);
+                    }}
                   />
                   <div className="w-4 h-4 bg-slate-900 peer-checked:bg-slate-300 rounded-full border-slate-800 text-slate-400"></div>
                   <label
@@ -51,7 +66,7 @@ const Filter = () => {
             <AreaSlider />
           </div>
         </div>
-        <div className="mt-8 ">
+        <div className="mt-2 ">
           <div className="text-md font-semibold mb-5">Population</div>
           <div className="mx-3">
             <AreaSlider />
