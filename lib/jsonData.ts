@@ -21,7 +21,7 @@ export const Continent = [
   },
   {
     id: 6,
-    name: "Australia",
+    name: "Oceania",
   },
   {
     id: 7,

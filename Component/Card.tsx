@@ -14,16 +14,21 @@ const Card: React.FC<types.CardProps> = ({ itm }) => {
       >
         <div className="w-full md:mx-auto">
           <div className="w-75 h-50 relative  md:w-full md:rounded-t-md md:mx-auto  ">
-          <Image
-            className="w-75 h-50 object-fill rounded-t-md"
-            src={itm.flags.png}
-            alt={itm.name.common}
-            fill={true}
-            // quality={100}
-          />
+            {/* <Image
+              className="w-75 h-50 object-fill rounded-t-md"
+              src={itm.flags.png}
+              alt={itm.name.common}
+              fill={true}
+              // quality={100}
+            /> */}
+            <img
+              className="w-75 h-50 md:w-full object-fill rounded-t-md"
+              src={itm.flags.png}
+              alt={itm.name.common}
+            />
           </div>
           <div className="px-2 mt-2 ">
-            <h1 className="text-slate-400 font-semibold text-2xl pb-1 border-b-1 border-slate-400">
+            <h1 className="text-slate-400 font-semibold text-2xl pb-1 border-b-1 border-slate-400 text-nowrap">
               {itm.name.common}
             </h1>
             <div className="flex mt-2 justify-between pb-2 border-b-1 border-slate-400">
@@ -43,7 +48,7 @@ const Card: React.FC<types.CardProps> = ({ itm }) => {
                   Continent
                 </div>
                 <div className="pt-1 text-md text-slate-400 font-bold">
-                  {itm.region}
+                  {itm.continents.join(",")}
                 </div>
               </div>
             </div>
