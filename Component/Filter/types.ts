@@ -5,4 +5,6 @@ export interface FilterProps {
   handleChangePopulation: () => void;
   search: string;
   continents: number[];
+  menu: boolean;
+  handleSliderClick: () => void;
 }

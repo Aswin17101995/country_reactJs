@@ -1,8 +1,10 @@
-'use client'
+"use client";
 import * as data from "../../lib/jsonData";
 import AreaSlider from "./AreaSlider";
 import * as types from "./types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { IoMdCloseCircle } from "react-icons/io";
+
 const Filter: React.FC<types.FilterProps> = ({
   handleSearch,
   handleChangeContinent,
@@ -10,12 +12,51 @@ const Filter: React.FC<types.FilterProps> = ({
   handleChangePopulation,
   search,
   continents,
+  menu,
+  handleSliderClick,
 }) => {
-  const [s,sets] = useState("")
+  const [filterStyle, setFilterStyle] = useState("hidden md:w-1/6");
+
+  useEffect(() => {
+    if (menu) {
+      setFilterStyle("absolute left-0 top-0");
+    } else {
+      setFilterStyle("hidden md:w-1/6");
+    }
+    return () => {
+      setFilterStyle("hidden md:w-1/6");
+    };
+  }, [menu]);
+  const scrollStyle = ` [&::-webkit-scrollbar]:w-1
+                        [&::-webkit-scrollbar-track]:bg-slate-800
+                        [&::-webkit-scrollbar-thumb]:bg-slate-400
+                        [&::-webkit-scrollbar-thumb]:rounded-full
+                        [&::-webkit-scrollbar-thumb]:h-4`;
   return (
     <>
-      <div className="md:w-1/6 p-2 text-slate-400 -translate-x-300 w-0 md:translate-x-0 bg-slate-800 shadow-md duration-100 md: h-screen">
-        <div className="mt-2 text-xl font-semibold">Filters</div>
+      <div
+        style={
+          menu
+            ? {
+                position: "absolute",
+                left: 0,
+                top: 0,
+                width: "85%",
+                display: "block",
+                zIndex: "20",
+              }
+            : {}
+        }
+        className={`hidden md:w-1/6 md:block p-2 pb-10 text-slate-400 w-0  bg-slate-800 shadow-md duration-100 h-screen overflow-y-scroll ${scrollStyle}`}
+      >
+        <div className="mt-2 text-xl font-semibold flex justify-between items-center">
+          <div>Filters</div>
+          {menu && (
+            <div className="md:hidden">
+              <IoMdCloseCircle size={20} onClick={handleSliderClick} />
+            </div>
+          )}
+        </div>
         <div className="mt-2">
           <label
             hidden
@@ -52,10 +93,11 @@ const Filter: React.FC<types.FilterProps> = ({
                     }}
                   />
                   <div
-                   onClick={() => {
-                    handleChangeContinent(itm.id);
-                  }}
-                  className="w-4 h-4 cursor-pointer bg-slate-900 peer-checked:bg-slate-300 rounded-full border-slate-800 text-slate-400"></div>
+                    onClick={() => {
+                      handleChangeContinent(itm.id);
+                    }}
+                    className="w-4 h-4 cursor-pointer bg-slate-900 peer-checked:bg-slate-300 rounded-full border-slate-800 text-slate-400"
+                  ></div>
                   <label
                     htmlFor={itm.id.toString()}
                     className="pl-2 cursor-pointer"
