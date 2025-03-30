@@ -60,3 +60,18 @@ export interface CardProps {
 export interface HeaderProps {
   handleSliderClick: () => void;
 }
+
+export interface EmptyListProps{
+  clearFilter:()=> void
+}
+
+export interface CardListWrapperProps {
+  loading: boolean;
+  filteredData: CountryList;
+  handlePage: () => void;
+  lastPage: number;
+  page: { value: number };
+  refProp: React.RefObject<HTMLDivElement | null>;
+  cardListStyle:string,
+  clearFilter:()=> void
+}

@@ -7,4 +7,5 @@ export interface FilterProps {
   continents: number[];
   menu: boolean;
   handleSliderClick: () => void;
+  clearFilter:()=>void
 }

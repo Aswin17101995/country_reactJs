@@ -3,12 +3,14 @@ import { getCountriesApi } from "../service/services";
 import Card from "@/Component/Card";
 import * as types from "../Component/types";
 import Filter from "@/Component/Filter/Filter";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDebounce } from "@/hooks/CustomHooks";
 import { memo } from "react";
 import * as JsonData from "../lib/jsonData";
 import Header from "@/Component/Header";
-
+import Loading from "@/Component/Loading";
+import EmptyList from "@/Component/EmptyList";
+import CardListWrapper from "@/Component/CardListWrapper";
 export default function Home() {
   const [allcountryData, setAllCountryData] =
     useState<types.CountryList | null>(null);
@@ -30,17 +32,20 @@ export default function Home() {
   const [lastPage, setLastPage] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const [menu, setmenu] = useState(false);
+  const [loading, setLoading] = useState(true)
 
   const checkFilteredCount = () => {
     return continents.length + (debounce.length > 0 ? 1 : 0);
   };
 
   const getCountry = useCallback(async () => {
+    setLoading(true)
     const countryDatas: types.CountryList | null = await getCountriesApi();
     if (countryDatas == null) {
       throw new Error("failed");
     }
     setAllCountryData(countryDatas);
+    setLoading(false)
   }, []);
 
   useEffect(() => {
@@ -56,6 +61,11 @@ export default function Home() {
       setLastPage(Math.ceil(countryList.length / perPage));
     }
   };
+
+  const clearFilter = () => {
+    setContinets([])
+    setSearch("")
+  }
 
   //common effect
   console.log(lastPage);
@@ -94,16 +104,17 @@ export default function Home() {
         });
       }
       setPage({ value: 0 });
-      if (ref && ref.current) {
+      if(ref && ref.current && (debounce.length > 0 || continents.length > 0)){
         ref.current.scrollTo({
-          top: 0,
-          left: 0,
-          behavior: "smooth",
-        });
+          top:0,
+          left:0,
+          behavior:"smooth"
+        })
       }
       setFullfilter(temp);
     }
   }, [debounce, continents, allcountryData]);
+
 
   useEffect(() => {
     if (fullfilter) {
@@ -152,8 +163,8 @@ export default function Home() {
     setContinets([...temp]);
   };
 
-  const handleChangeArea = () => {};
-  const handleChangePopulation = () => {};
+  const handleChangeArea = () => { };
+  const handleChangePopulation = () => { };
 
   useEffect(() => {
     const timer = setTimeout(() => handleDebounce(search), 500);
@@ -171,7 +182,7 @@ export default function Home() {
   };
 
   const CardListStyle = `w-full h-screen overflow-y-auto
-                        py-10 max-w-7xl px-3 pb-20 md:px-10 mx-auto grid 
+                        py-10  px-3 pb-20 md:px-10  grid 
                         grid-cols-1 md:grid-cols-2 lg:grid-cols-3 md:gap-10 items-center relative
                         [&::-webkit-scrollbar]:w-2
                         [&::-webkit-scrollbar-track]:bg-slate-800
@@ -179,10 +190,11 @@ export default function Home() {
                         [&::-webkit-scrollbar-thumb]:rounded-full
                         [&::-webkit-scrollbar-thumb]:h-10`;
 
+console.log("laoding ",loading,filteredData)
   return (
     <>
-      <div className="h-screen overflow-hidden pb-2">
-        <div className="flex max-7xl mx-auto">
+      <div className="h-screen overflow-hidden pb-2 2xl:w-7xl md:mx-auto w-full">
+        <div className="flex justify-center">
           <Filter
             handleSearch={handleSearch}
             handleChangeContinent={handleChangeContinent}
@@ -192,22 +204,20 @@ export default function Home() {
             continents={continents}
             menu={menu}
             handleSliderClick={handleSliderClick}
+            clearFilter={clearFilter}
           />
-          <div ref={ref} className="w-full md:w-5/6">
+          <div className="w-full lg:w-5/6">
             <Header handleSliderClick={handleSliderClick} />
-            <div className={CardListStyle}>
-              {filteredData?.map((itm) => (
-                <Card key={itm.name.common} itm={itm} />
-              ))}
-              {page.value + 1 < lastPage && (
-                <div
-                  className="my-10 col-span-1 md:col-span-2 lg:col-span-3 mx-auto rounded-md bg-slate-500 text-md px-3 py-2"
-                  onClick={handlePage}
-                >
-                  Load More
-                </div>
-              )}
-            </div>
+            <CardListWrapper loading={loading}
+              filteredData={filteredData}
+              handlePage={handlePage}
+              lastPage={lastPage}
+              page={page}
+              refProp={ref}
+              cardListStyle={CardListStyle}
+              clearFilter={clearFilter}
+            />
+            
           </div>
         </div>
       </div>

@@ -14,6 +14,7 @@ const Filter: React.FC<types.FilterProps> = ({
   continents,
   menu,
   handleSliderClick,
+  clearFilter
 }) => {
   const [filterStyle, setFilterStyle] = useState("hidden md:w-1/6");
 
@@ -38,24 +39,26 @@ const Filter: React.FC<types.FilterProps> = ({
         style={
           menu
             ? {
-                position: "absolute",
                 left: 0,
                 top: 0,
                 width: "85%",
-                display: "block",
-                zIndex: "20",
               }
             : {}
         }
-        className={`hidden md:w-1/6 md:block p-2 pb-10 text-slate-400 w-0  bg-slate-800 shadow-md duration-100 h-screen overflow-y-scroll ${scrollStyle}`}
+        className={`z-100 absolute -left-100 md:left-0 md:relative transition-all md:w-1/6 md:block p-2 pb-10 text-slate-400   bg-slate-800 shadow-md duration-100 h-screen overflow-y-scroll ${scrollStyle}`}
       >
         <div className="mt-2 text-xl font-semibold flex justify-between items-center">
           <div>Filters</div>
+          <div className="flex items-center">
+           <div className="px-2 py-1 bg-slate-700 text-sm cursor-pointer rounded-md text-slate-500 mr-2"
+           onClick={clearFilter}
+           >Clear</div>
           {menu && (
             <div className="md:hidden">
               <IoMdCloseCircle size={20} onClick={handleSliderClick} />
             </div>
           )}
+          </div>
         </div>
         <div className="mt-2">
           <label
@@ -109,7 +112,7 @@ const Filter: React.FC<types.FilterProps> = ({
             ))}
           </form>
         </div>
-        <div className="mt-2 pb-4 border-b-1 border-slate-400">
+        {/* <div className="mt-2 pb-4 border-b-1 border-slate-400">
           <div className="text-md font-semibold mb-5">Area</div>
           <div className="mx-3">
             <AreaSlider />
@@ -120,7 +123,7 @@ const Filter: React.FC<types.FilterProps> = ({
           <div className="mx-3">
             <AreaSlider />
           </div>
-        </div>
+        </div> */}
       </div>
     </>
   );
